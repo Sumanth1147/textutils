@@ -14,7 +14,7 @@ import {
 function App() {
 
   const[mode, setMode] = useState('light');
-  const[alert, setAlert] = useState(null)
+  const[alert, setAlert] = useState(null);
 
   const showAlert = (message, type) =>{
     setAlert(
@@ -27,18 +27,30 @@ function App() {
       } , 1500);
     }
 
+    const removeBodyClasses = ()=>{
+      document.body.classList.remove('bg-light')
+      document.body.classList.remove('bg-dark')
+      document.body.classList.remove('bg-warning')
+      document.body.classList.remove('bg-danger')
+      document.body.classList.remove('bg-success') 
+    }
   
 
-  const toggleMode = () => {
+  const toggleMode = (cls) => {
+    removeBodyClasses();
+    document.body.classList.add('bg-'+cls)
     if(mode === 'light'){
       setMode('dark');
       document.body.style.backgroundColor = '#042743';
-      document.title = 'TextUtils-Dark Mode';
+      showAlert("background color changed", "success");
     } else{
       setMode('light');
-      // document.body.style.backgroundColor = 'white';
+      document.body.style.backgroundColor = 'white';
+      showAlert("background color changed", "success");
     }
   }
+
+
   return (
     <>
      <Router>
@@ -46,9 +58,9 @@ function App() {
         <Alert alert={alert} />
         <div className="container my-3">
           <Routes>
-            <Route path="/about" element={<About />} />
+            <Route exact path="/about" element={<About mode={mode} />} />
             <Route
-              path="/"
+             exact path="/"
               element={
                 <TextForm
                   showAlert={showAlert}
